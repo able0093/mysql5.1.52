@@ -34,13 +34,13 @@ ENV MYSQL_VERSION 5.1.52
 
 RUN apt-get update && apt-get install -y ca-certificates wget --no-install-recommends && rm -rf /var/lib/apt/lists/* \
 	&& wget "https://cdn.mysql.com/archives/mysql-5.1/mysql-5.1.52-linux-x86_64-glibc23.tar.gz" -O mysql.tar.gz \
-#	&& wget "https://cdn.mysql.com/Downloads/MySQL-$MYSQL_MAJOR/mysql-$MYSQL_VERSION-linux-glibc2.5-x86_64.tar.gz.asc" -O mysql.tar.gz.asc \
+	&& wget "https://downloads.mysql.com/archives/gpg/?file=mysql-5.1.52-linux-x86_64-glibc23.tar.gz" -O mysql.tar.gz.asc \
 	&& apt-get purge -y --auto-remove ca-certificates wget \
 	&& export GNUPGHOME="$(mktemp -d)" \
 # gpg: key 5072E1F5: public key "MySQL Release Engineering <mysql-build@oss.oracle.com>" imported
 	&& gpg --keyserver ha.pool.sks-keyservers.net --recv-keys A4A9406876FCBD3C456770C88C718D3B5072E1F5 \
-	&& gpg --batch --verify mysql.tar.gz \
-#	&& rm -r "$GNUPGHOME" mysql.tar.gz.asc \
+	&& gpg --batch --verify mysql.tar.gz.asc mysql.tar.gz \
+	&& rm -r "$GNUPGHOME" mysql.tar.gz.asc \
 	&& mkdir /usr/local/mysql \
 	&& tar -xzf mysql.tar.gz -C /usr/local/mysql --strip-components=1 \
 	&& rm mysql.tar.gz \
