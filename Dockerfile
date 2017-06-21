@@ -33,7 +33,7 @@ ENV MYSQL_MAJOR 5.1
 ENV MYSQL_VERSION 5.1.52
 
 RUN apt-get update && apt-get install -y ca-certificates wget --no-install-recommends && rm -rf /var/lib/apt/lists/* \
-	&& wget "https://cdn.mysql.com/archives/mysql-5.1/mysql-5.1.52-linux-x86_64-glibc23.tar.gz" -O mysql.tar.gz \
+	&& wget "https://downloads.mysql.com/archives/get/file/mysql-5.1.52-linux-x86_64-glibc23.tar.gz" -O mysql.tar.gz \
 	&& wget "https://downloads.mysql.com/archives/gpg/?file=mysql-5.1.52-linux-x86_64-glibc23.tar.gz" -O mysql.tar.gz.asc \
 	&& apt-get purge -y --auto-remove ca-certificates wget \
 	&& export GNUPGHOME="$(mktemp -d)" \
