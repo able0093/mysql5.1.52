@@ -32,21 +32,21 @@ RUN apt-get update && apt-get install -y libaio1 pwgen && rm -rf /var/lib/apt/li
 ENV MYSQL_MAJOR 5.1
 ENV MYSQL_VERSION 5.1.52
 
-RUN apt-get update && apt-get install -y ca-certificates wget --no-install-recommends && rm -rf /var/lib/apt/lists/* \
-	&& wget "https://downloads.mysql.com/archives/get/file/mysql-5.1.52-linux-x86_64-glibc23.tar.gz" -O mysql.tar.gz \
-	&& wget "https://downloads.mysql.com/archives/gpg/?file=mysql-5.1.52-linux-x86_64-glibc23.tar.gz" -O mysql.tar.gz.asc \
-	&& apt-get purge -y --auto-remove ca-certificates wget \
-	&& export GNUPGHOME="$(mktemp -d)" \
+RUN apt-get update && apt-get install -y ca-certificates wget --no-install-recommends && rm -rf /var/lib/apt/lists/* 
+RUN wget "https://downloads.mysql.com/archives/get/file/mysql-5.1.52-linux-x86_64-glibc23.tar.gz" -O mysql.tar.gz 
+RUN wget "https://downloads.mysql.com/archives/gpg/?file=mysql-5.1.52-linux-x86_64-glibc23.tar.gz" -O mysql.tar.gz.asc 
+RUN apt-get purge -y --auto-remove ca-certificates wget 
+RUN export GNUPGHOME="$(mktemp -d)" \
 # gpg: key 5072E1F5: public key "MySQL Release Engineering <mysql-build@oss.oracle.com>" imported
-	&& gpg --keyserver ha.pool.sks-keyservers.net --recv-keys A4A9406876FCBD3C456770C88C718D3B5072E1F5 \
-	&& gpg --batch --verify mysql.tar.gz.asc mysql.tar.gz \
-	&& rm -r "$GNUPGHOME" mysql.tar.gz.asc \
-	&& mkdir /usr/local/mysql \
-	&& tar -xzf mysql.tar.gz -C /usr/local/mysql --strip-components=1 \
-	&& rm mysql.tar.gz \
-	&& rm -rf /usr/local/mysql/mysql-test /usr/local/mysql/sql-bench \
-	&& rm -rf /usr/local/mysql/bin/*-debug /usr/local/mysql/bin/*_embedded \
-	&& find /usr/local/mysql -type f -name "*.a" -delete \
+RUN gpg --keyserver ha.pool.sks-keyservers.net --recv-keys A4A9406876FCBD3C456770C88C718D3B5072E1F5 
+RUN gpg --batch --verify mysql.tar.gz.asc mysql.tar.gz 
+RUN rm -r "$GNUPGHOME" mysql.tar.gz.asc 
+RUN mkdir /usr/local/mysql 
+RUN tar -xzf mysql.tar.gz -C /usr/local/mysql --strip-components=1 
+RUN rm mysql.tar.gz \
+RUN rm -rf /usr/local/mysql/mysql-test /usr/local/mysql/sql-bench 
+RUN rm -rf /usr/local/mysql/bin/*-debug /usr/local/mysql/bin/*_embedded 
+RUN find /usr/local/mysql -type f -name "*.a" -delete \
 	&& apt-get update && apt-get install -y binutils && rm -rf /var/lib/apt/lists/* \
 	&& { find /usr/local/mysql -type f -executable -exec strip --strip-all '{}' + || true; } \
 	&& apt-get purge -y --auto-remove binutils
